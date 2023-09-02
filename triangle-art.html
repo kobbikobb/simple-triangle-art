@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <style>
+    body {
+      margin: 0;
+      background-color: lightblue;
+      overflow: hidden;
+    }
+
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+
+  <canvas id="canvas"></canvas>
+
+  <script>
+
+    const canvas = document.getElementById('canvas');
+    const context = canvas.getContext('2d');
+
+    // Match canvas dimensions with the window
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let color = getRandomColor();
+
+    let dots = [];
+
+    function onMouseDown(event) {
+      const dot = { x: event.clientX, y: event.clientY };
+      dots.push(dot);
+
+      drawDot(dot);
+
+      if (dots.length === 3) {
+        drawArt();
+
+        dots = [];
+        color = getRandomColor();
+      }
+    }
+
+    canvas.addEventListener('mousedown', onMouseDown);
+
+    function drawArt() {
+      const dot1 = dots[0];
+      const dot2 = dots[1];
+      let currentDot = calculateMidpoint(dot1, dot2);
+      drawDot(currentDot);
+
+      for (let i = 0; i < 50000; i++) {
+        const randomIndex = Math.floor(Math.random() * 3);
+        const targetDot = dots[randomIndex];
+
+        currentDot = calculateMidpoint(currentDot, targetDot);
+        drawDot(currentDot);
+      }
+    }
+
+    function calculateMidpoint(a, b) {
+      return { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 }
+    }
+
+    function drawDot({ x, y }) {
+      const radius = 2;
+
+      context.fillStyle = color;
+      context.beginPath();
+      context.arc(x, y, radius, 0, Math.PI * 2);
+      context.fill();
+    }
+
+    function getRandomColor() {
+      const letters = '0123456789ABCDEF';
+      let color = '#';
+      for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    }
+
+  </script>
+
+</body>
+
+</html>
