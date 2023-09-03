@@ -5,7 +5,7 @@
   <style>
     body {
       margin: 0;
-      background-color: lightblue;
+      background-color: lightskyblue;
       overflow: hidden;
     }
 
@@ -28,20 +28,19 @@
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
+    let edges = [];
     let color = getRandomColor();
-
-    let dots = [];
 
     function onMouseDown(event) {
       const dot = { x: event.clientX, y: event.clientY };
-      dots.push(dot);
-
+      edges.push(dot);
       drawDot(dot);
 
-      if (dots.length === 3) {
+      if (edges.length === 3) {
         drawArt();
 
-        dots = [];
+        // Start drawing a new triangle
+        edges = [];
         color = getRandomColor();
       }
     }
@@ -49,18 +48,17 @@
     canvas.addEventListener('mousedown', onMouseDown);
 
     function drawArt() {
-      const dot1 = dots[0];
-      const dot2 = dots[1];
-      let currentDot = calculateMidpoint(dot1, dot2);
+      let currentDot = calculateMidpoint(edges[0], edges[1]);
       drawDot(currentDot);
 
       for (let i = 0; i < 50000; i++) {
-        const randomIndex = Math.floor(Math.random() * 3);
-        const targetDot = dots[randomIndex];
-
-        currentDot = calculateMidpoint(currentDot, targetDot);
+        currentDot = calculateMidpoint(currentDot, getRandomEdge());
         drawDot(currentDot);
       }
+    }
+
+    function getRandomEdge() {
+      return edges[Math.floor(Math.random() * 3)];
     }
 
     function calculateMidpoint(a, b) {

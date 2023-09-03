@@ -3,7 +3,7 @@
 You click on the screen three times to draw a triangle with a random color.
 The application fills the triangle with a crazy inner triangle pattern.
 
-After the user has clicked on the 3 times forming the triangle edges, we fill the triangle with this algorithm:
+Algorithm for the pattern:
 
 ```
     // Draw a dot between the first 2 edges
